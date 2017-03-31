@@ -23,7 +23,11 @@ module OmniContacts
       end
 
       def callback
-        host_url_from_rack_env(@env) + callback_path
+        if ENV["OMNICONTACTS_HOST_URL"]
+          ENV["OMNICONTACTS_HOST_URL"] + callback_path
+        else
+          host_url_from_rack_env(@env) + callback_path
+        end
       end
 
       alias :redirect_path :callback_path

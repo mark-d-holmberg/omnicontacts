@@ -29,7 +29,11 @@ module OmniContacts
       end
 
       def redirect_uri
-        host_url_from_rack_env(@env) + redirect_path
+        if ENV["OMNICONTACTS_HOST_URL"]
+          ENV["OMNICONTACTS_HOST_URL"] + redirect_path
+        else
+          host_url_from_rack_env(@env) + redirect_path
+        end
       end
 
       # It extract the authorization code from the query string.
