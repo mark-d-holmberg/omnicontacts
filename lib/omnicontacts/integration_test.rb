@@ -11,13 +11,13 @@ class IntegrationTest
   end
 
   def clear_mocks
-    @user_mocks = {}
+    @user_mocks    = {}
     @contact_mocks = {}
   end
 
   def mock provider, contacts, user = {}
     @contact_mocks[provider.to_sym] = contacts
-    @user_mocks[provider.to_sym] = user
+    @user_mocks[provider.to_sym]    = user
   end
 
   def mock_authorization_from_user provider

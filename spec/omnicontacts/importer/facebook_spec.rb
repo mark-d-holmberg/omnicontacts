@@ -92,7 +92,7 @@ describe OmniContacts::Importer::Facebook do
       result.first[:name].should eq('John Smith')
       result.first[:email].should be_nil
       result.first[:gender].should eq('male')
-      result.first[:birthday].should eq({:day=>21, :month=>06, :year=>nil})
+      result.first[:birthday].should eq({day: 21, month: 06, year: nil})
       result.first[:profile_picture].should eq('https://graph.facebook.com/608061886/picture')
       result.first[:relation].should eq('cousin')
     end
@@ -112,7 +112,7 @@ describe OmniContacts::Importer::Facebook do
       user[:name].should eq("Chris Johnson")
       user[:email].should eq("chrisjohnson@gmail.com")
       user[:gender].should eq("male")
-      user[:birthday].should eq({:day=>21, :month=>06, :year=>1982})
+      user[:birthday].should eq({day: 21, month: 06, year: 1982})
       user[:profile_picture].should eq("https://graph.facebook.com/543216789/picture")
     end
   end

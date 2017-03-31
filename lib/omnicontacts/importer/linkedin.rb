@@ -10,19 +10,19 @@ module OmniContacts
 
       def initialize *args
         super *args
-        @auth_host = "www.linkedin.com"
-        @authorize_path = "/uas/oauth2/authorization"
+        @auth_host       = "www.linkedin.com"
+        @authorize_path  = "/uas/oauth2/authorization"
         @auth_token_path = "/uas/oauth2/accessToken"
-        @scope = (args[3] && args[3][:scope]) || "r_network"
-        @contacts_host = "api.linkedin.com"
-        @contacts_path = "/v1/people/~/connections:(id,first-name,last-name,picture-url)"
-        @self_host = "www.linkedin.com"
-        @profile_path = "/oauth2/v1/userinfo"
-        @state = (args[3] && args[3][:state])
+        @scope           = (args[3] && args[3][:scope]) || "r_network"
+        @contacts_host   = "api.linkedin.com"
+        @contacts_path   = "/v1/people/~/connections:(id,first-name,last-name,picture-url)"
+        @self_host       = "www.linkedin.com"
+        @profile_path    = "/oauth2/v1/userinfo"
+        @state           = (args[3] && args[3][:state])
       end
 
       def fetch_contacts_using_access_token access_token, token_type
-        token_type = "Bearer" if token_type.nil?
+        token_type        = "Bearer" if token_type.nil?
         contacts_response = https_get(@contacts_host, @contacts_path, contacts_req_params, contacts_req_headers(access_token, token_type))
         contacts_from_response contacts_response
       end
@@ -44,7 +44,7 @@ module OmniContacts
         return contacts if response.nil?
         response['values'].map do |entry|
           {
-           id: entry['id'],
+            id: entry['id'],
             first_name: normalize_name(entry['firstName']),
             last_name: normalize_name(entry['lastName']),
             name: full_name(entry['firstName'],entry['lastName']),

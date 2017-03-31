@@ -4,7 +4,7 @@ require "omnicontacts/authorization/oauth2"
 describe OmniContacts::Authorization::OAuth2 do
 
   before(:all) do
-    OAuth2TestClass= Struct.new(:auth_host, :authorize_path, :client_id, :client_secret, :scope, :redirect_uri, :auth_token_path)
+    OAuth2TestClass = Struct.new(:auth_host, :authorize_path, :client_id, :client_secret, :scope, :redirect_uri, :auth_token_path)
     class OAuth2TestClass
       include OmniContacts::Authorization::OAuth2
     end

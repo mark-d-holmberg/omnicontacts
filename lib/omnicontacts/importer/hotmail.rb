@@ -11,24 +11,24 @@ module OmniContacts
 
       def initialize app, client_id, client_secret, options ={}
         super app, client_id, client_secret, options
-        @auth_host = "login.live.com"
-        @authorize_path = "/oauth20_authorize.srf"
-        @scope = options[:permissions] || "wl.signin, wl.basic, wl.birthday , wl.emails ,wl.contacts_birthday , wl.contacts_photos, wl.contacts_emails"
+        @auth_host       = "login.live.com"
+        @authorize_path  = "/oauth20_authorize.srf"
+        @scope           = options[:permissions] || "wl.signin, wl.basic, wl.birthday , wl.emails ,wl.contacts_birthday , wl.contacts_photos, wl.contacts_emails"
         @auth_token_path = "/oauth20_token.srf"
-        @contacts_host = "apis.live.net"
-        @contacts_path = "/v5.0/me/contacts"
-        @self_path = "/v5.0/me"
+        @contacts_host   = "apis.live.net"
+        @contacts_path   = "/v5.0/me/contacts"
+        @self_path       = "/v5.0/me"
       end
 
       def fetch_contacts_using_access_token access_token, access_token_secret
         fetch_current_user(access_token)
-        contacts_response = https_get(@contacts_host, @contacts_path, :access_token => access_token)
+        contacts_response = https_get(@contacts_host, @contacts_path, access_token: access_token)
         contacts_from_response contacts_response
       end
 
       def fetch_current_user access_token
-        self_response =  https_get(@contacts_host, @self_path, :access_token => access_token)
-        user = current_user self_response
+        self_response =  https_get(@contacts_host, @self_path, access_token: access_token)
+        user          = current_user self_response
         set_current_user user
       end
 
@@ -39,16 +39,16 @@ module OmniContacts
         contacts = []
         response['data'].each do |entry|
           # creating nil fields to keep the fields consistent across other networks
-          contact = {:id => nil, :first_name => nil, :last_name => nil, :name => nil, :email => nil, :gender => nil, :birthday => nil, :profile_picture=> nil, :relation => nil, :email_hashes => []}
-          contact[:id] = entry['user_id'] ? entry['user_id'] : entry['id']
-	        contact[:email] = parse_email(entry['emails']) if valid_email? parse_email(entry['emails'])
-	        contact[:first_name] = normalize_name(entry['first_name'])
-	        contact[:last_name] = normalize_name(entry['last_name'])
-	        contact[:name] = normalize_name(entry['name'])
-          contact[:birthday] = birthday_format(entry['birth_month'], entry['birth_day'], entry['birth_year'])
-          contact[:gender] = entry['gender']
+          contact                   = {id: nil, first_name: nil, last_name: nil, name: nil, email: nil, gender: nil, birthday: nil, profile_picture: nil, relation: nil, email_hashes: []}
+          contact[:id]              = entry['user_id'] ? entry['user_id'] : entry['id']
+          contact[:email]           = parse_email(entry['emails']) if valid_email? parse_email(entry['emails'])
+          contact[:first_name]      = normalize_name(entry['first_name'])
+          contact[:last_name]       = normalize_name(entry['last_name'])
+          contact[:name]            = normalize_name(entry['name'])
+          contact[:birthday]        = birthday_format(entry['birth_month'], entry['birth_day'], entry['birth_year'])
+          contact[:gender]          = entry['gender']
           contact[:profile_picture] = image_url(entry['user_id'])
-          contact[:email_hashes] = entry['email_hashes']
+          contact[:email_hashes]    = entry['email_hashes']
           contacts << contact if contact[:name] || contact[:first_name]
         end
         contacts
@@ -61,11 +61,11 @@ module OmniContacts
 
       def current_user me
         return nil if me.nil?
-        me = JSON.parse(me)
+        me    = JSON.parse(me)
         email = parse_email(me['emails'])
-        user = {:id => me['id'], :email => email, :name => me['name'], :first_name => me['first_name'],
-                :last_name => me['last_name'], :gender => me['gender'], :profile_picture => image_url(me['id']),
-                :birthday => birthday_format(me['birth_month'], me['birth_day'], me['birth_year'])
+        user  = {id: me['id'], email: email, name: me['name'], first_name: me['first_name'],
+                last_name: me['last_name'], gender: me['gender'], profile_picture: image_url(me['id']),
+                birthday: birthday_format(me['birth_month'], me['birth_day'], me['birth_year'])
         }
         user
       end

@@ -30,13 +30,13 @@ module OmniContacts
 
       def request_token_req_params
         {
-          :oauth_consumer_key => consumer_key,
-          :oauth_nonce => encode(random_string),
-          :oauth_signature_method => "PLAINTEXT",
-          :oauth_signature => encode(consumer_secret + "&"),
-          :oauth_timestamp => timestamp,
-          :oauth_version => OAUTH_VERSION,
-          :oauth_callback => callback
+          oauth_consumer_key: consumer_key,
+          oauth_nonce: encode(random_string),
+          oauth_signature_method: "PLAINTEXT",
+          oauth_signature: encode(consumer_secret + "&"),
+          oauth_timestamp: timestamp,
+          oauth_version: OAUTH_VERSION,
+          oauth_callback: callback
         }
       end
 
@@ -79,21 +79,21 @@ module OmniContacts
 
       def access_token_req_params auth_token, auth_token_secret, auth_verifier
         {
-          :oauth_consumer_key => consumer_key,
-          :oauth_nonce => encode(random_string),
-          :oauth_signature_method => "PLAINTEXT",
-          :oauth_signature => encode(consumer_secret + "&" + auth_token_secret),
-          :oauth_version => OAUTH_VERSION,
-          :oauth_timestamp => timestamp,
-          :oauth_token => auth_token,
-          :oauth_verifier => auth_verifier
+          oauth_consumer_key: consumer_key,
+          oauth_nonce: encode(random_string),
+          oauth_signature_method: "PLAINTEXT",
+          oauth_signature: encode(consumer_secret + "&" + auth_token_secret),
+          oauth_version: OAUTH_VERSION,
+          oauth_timestamp: timestamp,
+          oauth_token: auth_token,
+          oauth_verifier: auth_verifier
         }
       end
 
       public
 
       # Calculates a signature using HMAC-SHA1 according to the OAuth 1.0 specifications.
-      # 
+      #
       # The base string is given is a RFC 3986 encoded concatenation of:
       # * Uppercase HTTP method
       # * An '&'

@@ -10,15 +10,15 @@ module OmniContacts
 
       def initialize *args
         super *args
-        @auth_host = "accounts.google.com"
-        @authorize_path = "/o/oauth2/auth"
+        @auth_host       = "accounts.google.com"
+        @authorize_path  = "/o/oauth2/auth"
         @auth_token_path = "/o/oauth2/token"
-        @scope = (args[3] && args[3][:scope]) || "https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/userinfo#email https://www.googleapis.com/auth/userinfo.profile"
-        @contacts_host = "www.google.com"
-        @contacts_path = "/m8/feeds/contacts/default/full"
-        @max_results =  (args[3] && args[3][:max_results]) || 100
-        @self_host = "www.googleapis.com"
-        @profile_path = "/oauth2/v3/userinfo"
+        @scope           = (args[3] && args[3][:scope]) || "https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/userinfo#email https://www.googleapis.com/auth/userinfo.profile"
+        @contacts_host   = "www.google.com"
+        @contacts_path   = "/m8/feeds/contacts/default/full"
+        @max_results     =  (args[3] && args[3][:max_results]) || 100
+        @self_host       = "www.googleapis.com"
+        @profile_path    = "/oauth2/v3/userinfo"
       end
 
       def fetch_contacts_using_access_token access_token, token_type
@@ -29,7 +29,7 @@ module OmniContacts
 
       def fetch_current_user access_token, token_type
         self_response = https_get(@self_host, @profile_path, contacts_req_params, contacts_req_headers(access_token, token_type))
-        user = current_user(self_response, access_token, token_type)
+        user          = current_user(self_response, access_token, token_type)
         set_current_user user
       end
 
@@ -52,37 +52,37 @@ module OmniContacts
         response['feed']['entry'].each do |entry|
           # creating nil fields to keep the fields consistent across other networks
 
-          contact = { :id => nil,
-                      :first_name => nil,
-                      :last_name => nil,
-                      :name => nil,
-                      :emails => nil,
-                      :gender => nil,
-                      :birthday => nil,
-                      :profile_picture=> nil,
-                      :relation => nil,
-                      :addresses => nil,
-                      :phone_numbers => nil,
-                      :dates => nil,
-                      :company => nil,
-                      :position => nil
+          contact = { id:              nil,
+                      first_name:      nil,
+                      last_name:       nil,
+                      name:            nil,
+                      emails:          nil,
+                      gender:          nil,
+                      birthday:        nil,
+                      profile_picture: nil,
+                      relation:        nil,
+                      addresses:       nil,
+                      phone_numbers:   nil,
+                      dates:           nil,
+                      company:         nil,
+                      position:        nil
           }
           contact[:id] = entry['id']['$t'] if entry['id']
           if entry['gd$name']
-            gd_name = entry['gd$name']
+            gd_name              = entry['gd$name']
             contact[:first_name] = normalize_name(entry['gd$name']['gd$givenName']['$t']) if gd_name['gd$givenName']
-            contact[:last_name] = normalize_name(entry['gd$name']['gd$familyName']['$t']) if gd_name['gd$familyName']
-            contact[:name] = normalize_name(entry['gd$name']['gd$fullName']['$t']) if gd_name['gd$fullName']
-            contact[:name] = full_name(contact[:first_name],contact[:last_name]) if contact[:name].nil?
+            contact[:last_name]  = normalize_name(entry['gd$name']['gd$familyName']['$t']) if gd_name['gd$familyName']
+            contact[:name]       = normalize_name(entry['gd$name']['gd$fullName']['$t']) if gd_name['gd$fullName']
+            contact[:name]       = full_name(contact[:first_name],contact[:last_name]) if contact[:name].nil?
           end
 
           contact[:emails] = []
           entry['gd$email'].each do |email|
             if email['rel']
               split_index = email['rel'].index('#')
-              contact[:emails] << {:name => email['rel'][split_index + 1, email['rel'].length - 1], :email => email['address']}
+              contact[:emails] << {name: email['rel'][split_index + 1, email['rel'].length - 1], email: email['address']}
             elsif email['label']
-              contact[:emails] << {:name => email['label'], :email => email['address']}
+              contact[:emails] << {name: email['label'], email: email['address']}
             end
           end if entry['gd$email']
 
@@ -108,22 +108,22 @@ module OmniContacts
           entry['gd$structuredPostalAddress'].each do |address|
             if address['rel']
               split_index = address['rel'].index('#')
-              new_address = {:name => address['rel'][split_index + 1, address['rel'].length - 1]}
+              new_address = {name: address['rel'][split_index + 1, address['rel'].length - 1]}
             elsif address['label']
-              new_address = {:name => address['label']}
+              new_address = {name: address['label']}
             end
 
             new_address[:address_1] = address['gd$street']['$t'] if address['gd$street']
             new_address[:address_1] = address['gd$formattedAddress']['$t'] if new_address[:address_1].nil? && address['gd$formattedAddress']
             if !new_address[:address_1].nil? && new_address[:address_1].index("\n")
-              parts = new_address[:address_1].split("\n")
+              parts                   = new_address[:address_1].split("\n")
               new_address[:address_1] = parts.first
               # this may contain city/state/zip if user jammed it all into one string.... :-(
               new_address[:address_2] = parts[1..-1].join(', ')
             end
-            new_address[:city] = address['gd$city']['$t'] if address['gd$city']
-            new_address[:region] = address['gd$region']['$t'] if address['gd$region'] # like state or province
-            new_address[:country] = address['gd$country']['code'] if address['gd$country']
+            new_address[:city]     = address['gd$city']['$t'] if address['gd$city']
+            new_address[:region]   = address['gd$region']['$t'] if address['gd$region'] # like state or province
+            new_address[:country]  = address['gd$country']['code'] if address['gd$country']
             new_address[:postcode] = address['gd$postcode']['$t'] if address['gd$postcode']
             contact[:addresses] << new_address
           end if entry['gd$structuredPostalAddress']
@@ -132,19 +132,19 @@ module OmniContacts
           if contact[:addresses][0]
             contact[:address_1] = contact[:addresses][0][:address_1]
             contact[:address_2] = contact[:addresses][0][:address_2]
-            contact[:city] = contact[:addresses][0][:city]
-            contact[:region] = contact[:addresses][0][:region]
-            contact[:country] = contact[:addresses][0][:country]
-            contact[:postcode] = contact[:addresses][0][:postcode]
+            contact[:city]      = contact[:addresses][0][:city]
+            contact[:region]    = contact[:addresses][0][:region]
+            contact[:country]   = contact[:addresses][0][:country]
+            contact[:postcode]  = contact[:addresses][0][:postcode]
           end
 
           contact[:phone_numbers] = []
           entry['gd$phoneNumber'].each do |phone_number|
             if phone_number['rel']
               split_index = phone_number['rel'].index('#')
-              contact[:phone_numbers] << {:name => phone_number['rel'][split_index + 1, phone_number['rel'].length - 1], :number => phone_number['$t']}
+              contact[:phone_numbers] << {name: phone_number['rel'][split_index + 1, phone_number['rel'].length - 1], number: phone_number['$t']}
             elsif phone_number['label']
-              contact[:phone_numbers] << {:name => phone_number['label'], :number => phone_number['$t']}
+              contact[:phone_numbers] << {name: phone_number['label'], number: phone_number['$t']}
             end
           end if entry['gd$phoneNumber']
 
@@ -164,15 +164,15 @@ module OmniContacts
             contact[:dates] = []
             entry['gContact$event'].each do |event|
               if event['rel']
-                contact[:dates] << {:name => event['rel'], :date => birthday(event['gd$when']['startTime'])}
+                contact[:dates] << {name: event['rel'], date: birthday(event['gd$when']['startTime'])}
               elsif event['label']
-                contact[:dates] << {:name => event['label'], :date => birthday(event['gd$when']['startTime'])}
+                contact[:dates] << {name: event['label'], date: birthday(event['gd$when']['startTime'])}
               end
             end
           end
 
           if entry['gd$organization']
-            contact[:company] = entry['gd$organization'][0]['gd$orgName']['$t'] if entry['gd$organization'][0]['gd$orgName']
+            contact[:company]  = entry['gd$organization'][0]['gd$orgName']['$t'] if entry['gd$organization'][0]['gd$orgName']
             contact[:position] = entry['gd$organization'][0]['gd$orgTitle']['$t'] if entry['gd$organization'][0]['gd$orgTitle']
           end
 
@@ -185,9 +185,9 @@ module OmniContacts
       def current_user me, access_token, token_type
         return nil if me.nil?
         me = JSON.parse(me)
-        user = {:id => me['id'], :email => me['email'], :name => me['name'], :first_name => me['given_name'],
-                :last_name => me['family_name'], :gender => me['gender'], :birthday => birthday(me['birthday']), :profile_picture => me["picture"],
-                :access_token => access_token, :token_type => token_type
+        user = {id: me['id'], email: me['email'], name: me['name'], first_name: me['given_name'],
+                last_name: me['family_name'], gender: me['gender'], birthday: birthday(me['birthday']), profile_picture: me["picture"],
+                access_token: access_token, token_type: token_type
         }
         user
       end

@@ -4,7 +4,7 @@ require "omnicontacts/importer/outlook"
 describe OmniContacts::Importer::Outlook do
 
   let(:permissions) { "Contacts.Read" }
-  let(:outlook) { OmniContacts::Importer::Outlook.new({}, "app_id", "app_secret", {:permissions => permissions}) }
+  let(:outlook) { OmniContacts::Importer::Outlook.new({}, "app_id", "app_secret", {permissions: permissions}) }
 
   let(:self_response) {
     '{
@@ -117,7 +117,7 @@ describe OmniContacts::Importer::Outlook do
       result.first[:last_name].should eq("Contact")
       result.first[:name].should eq("First Contact")
       result.first[:email].should eq("contact.first@email.com")
-      result.first[:birthday].should eq({ :day => 14, :month => 8, :year => nil })
+      result.first[:birthday].should eq({ day: 14, month: 8, year: nil })
       result.first[:address_1].should eq("address1")
       result.first[:address_2].should be_nil
       result.first[:city].should eq("city")

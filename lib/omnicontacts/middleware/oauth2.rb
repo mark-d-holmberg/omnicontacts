@@ -17,10 +17,10 @@ module OmniContacts
 
       def initialize app, client_id, client_secret, options ={}
         super app, options
-        @client_id = client_id
+        @client_id     = client_id
         @client_secret = client_secret
         @redirect_path = options[:redirect_path] || "#{ MOUNT_PATH }#{class_name}/callback"
-        @ssl_ca_file = options[:ssl_ca_file]
+        @ssl_ca_file   = options[:ssl_ca_file]
       end
 
       def request_authorization_from_user

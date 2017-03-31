@@ -4,7 +4,7 @@ require "omnicontacts/authorization/oauth1"
 describe OmniContacts::Authorization::OAuth1 do
 
   before(:all) do
-    OAuth1TestClass= Struct.new(:consumer_key, :consumer_secret, :auth_host, :auth_token_path, :auth_path, :access_token_path, :callback)
+    OAuth1TestClass = Struct.new(:consumer_key, :consumer_secret, :auth_host, :auth_token_path, :auth_path, :access_token_path, :callback)
     class OAuth1TestClass
       include OmniContacts::Authorization::OAuth1
     end
@@ -51,9 +51,9 @@ describe OmniContacts::Authorization::OAuth1 do
 
   describe "fetch_access_token" do
     it "should request the access token using all required parameters" do
-      auth_token = "token"
+      auth_token        = "token"
       auth_token_secret = "token_secret"
-      auth_verifier = "verifier"
+      auth_verifier     = "verifier"
       test_target.should_receive(:https_post) do |host, path, params|
         host.should eq(test_target.auth_host)
         path.should eq(test_target.access_token_path)
@@ -76,7 +76,7 @@ describe OmniContacts::Authorization::OAuth1 do
   end
 
   describe "oauth_signature" do
-    subject { test_target.oauth_signature("GET", "https://social.yahooapis.com/v1/user", {:name => "diego", :surname => "castorina"}, "secret2") }
+    subject { test_target.oauth_signature("GET", "https://social.yahooapis.com/v1/user", {name: "diego", surname: "castorina"}, "secret2") }
     it { should eq("xfumZoyVYUbHXSAafdha3HZUqQg%3D") }
   end
 end

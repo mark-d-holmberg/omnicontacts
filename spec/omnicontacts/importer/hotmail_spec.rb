@@ -4,7 +4,7 @@ require "omnicontacts/importer/hotmail"
 describe OmniContacts::Importer::Hotmail do
 
   let(:permissions) { "perm1, perm2" }
-  let(:hotmail) { OmniContacts::Importer::Hotmail.new({}, "client_id", "client_secret", {:permissions => permissions}) }
+  let(:hotmail) { OmniContacts::Importer::Hotmail.new({}, "client_id", "client_secret", {permissions: permissions}) }
 
   let(:self_response) {
     '{
@@ -78,7 +78,7 @@ describe OmniContacts::Importer::Hotmail do
       result.first[:name].should eq("John Smith")
       result.first[:email].should be_nil
       result.first[:gender].should be_nil
-      result.first[:birthday].should eq({:day=>5, :month=>6, :year=>1952})
+      result.first[:birthday].should eq({day: 5, month: 6, year: 1952})
       result.first[:profile_picture].should eq('https://apis.live.net/v5.0/123456/picture')
       result.first[:relation].should be_nil
       result.first[:email_hashes].should eq(["1234567890"])
@@ -97,7 +97,7 @@ describe OmniContacts::Importer::Hotmail do
       user[:last_name].should eq('Johnson')
       user[:name].should eq('Chris Johnson')
       user[:gender].should be_nil
-      user[:birthday].should eq({:day=>21, :month=>06, :year=>1982})
+      user[:birthday].should eq({day: 21, month: 06, year: 1982})
       user[:email].should eq('chrisjohn@gmail.com')
       user[:profile_picture].should eq('https://apis.live.net/v5.0/4502de12390223d0/picture')
     end

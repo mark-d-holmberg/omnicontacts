@@ -46,7 +46,7 @@ describe OmniContacts::ParseUtils do
   describe "email_to_name" do
     it "create a probable name from email" do
       username_or_email = "foo.bar@test.com"
-      result = email_to_name(username_or_email)
+      result            = email_to_name(username_or_email)
       result.should eq ['foo','bar',"foo bar"]
     end
   end

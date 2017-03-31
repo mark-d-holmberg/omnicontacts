@@ -12,9 +12,9 @@ module OmniContacts
       attr_reader :ssl_ca_file
 
       def initialize app, options
-        @app = app
+        @app            = app
         @listening_path = MOUNT_PATH + class_name
-        @ssl_ca_file = options[:ssl_ca_file]
+        @ssl_ca_file    = options[:ssl_ca_file]
       end
 
       def class_name
@@ -92,8 +92,8 @@ module OmniContacts
       def handle_error error_type, exception
         logger.puts("Error #{error_type} while processing #{@env["PATH_INFO"]}: #{exception.message}") if logger
         failure_url = "#{ MOUNT_PATH }failure?error_message=#{error_type}&importer=#{class_name}"
-        params_url = append_request_params(failure_url)
-        target_url = append_state_query(params_url)
+        params_url  = append_request_params(failure_url)
+        target_url  = append_state_query(params_url)
         [302, {"Content-Type" => "text/html", "location" => target_url}, []]
       end
 

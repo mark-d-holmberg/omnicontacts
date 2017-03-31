@@ -3,8 +3,8 @@ module OmniContacts
 
     # return has of birthday day, month and year
     def birthday_format month, day, year
-      return {:day => day.to_i, :month => month.to_i, :year => year.to_i}if year && month && day
-      return {:day => day.to_i, :month => month.to_i, :year => nil} if !year && month && day
+      return {day: day.to_i, month: month.to_i, year: year.to_i}if year && month && day
+      return {day: day.to_i, month: month.to_i, year: nil} if !year && month && day
       return nil if (!year && !month) || (!year && !day)
     end
 

@@ -159,7 +159,7 @@ describe OmniContacts::Importer::Gmail do
       result.first[:name].should eq("Edward Bennet")
       result.first[:email].should eq("bennet@gmail.com")
       result.first[:gender].should eq("male")
-      result.first[:birthday].should eq({ :day => 02, :month => 07, :year => 1954 })
+      result.first[:birthday].should eq({ day: 02, month: 07, year: 1954 })
       result.first[:relation].should eq('father')
       result.first[:profile_picture].should eq("https://www.google.com/m8/feeds/photos/media/logged_in_user%40gmail.com/6b41d030b05abc?&access_token=token")
       result.first[:dates][0][:name].should eq("anniversary")
@@ -176,7 +176,7 @@ describe OmniContacts::Importer::Gmail do
       result.last[:name].should eq("Emilia Fox")
       result.last[:email].should eq("emilia.fox@gmail.com")
       result.last[:gender].should eq("female")
-      result.last[:birthday].should eq({ :day => 10, :month => 02, :year => 1974 })
+      result.last[:birthday].should eq({ day: 10, month: 02, year: 1974 })
       result.last[:profile_picture].should be_nil
       result.last[:relation].should eq('spouse')
       result.first[:address_1].should eq('1313 Trashview Court')
@@ -202,7 +202,7 @@ describe OmniContacts::Importer::Gmail do
       user[:name].should eq("Chris Johnson")
       user[:email].should eq("chrisjohnson@gmail.com")
       user[:gender].should eq("male")
-      user[:birthday].should eq({ :day => 21, :month => 06, :year => 1982 })
+      user[:birthday].should eq({ day: 21, month: 06, year: 1982 })
       user[:profile_picture].should eq("https://lh3.googleusercontent.com/-b8aFbTBM/AAAAAAI/IWA/vsek/photo.jpg")
     end
 
@@ -307,7 +307,7 @@ describe OmniContacts::Importer::Gmail do
         result.last[:name].should eq("Emilia Fox")
         result.last[:email].should eq("emilia.fox@gmail.com")
         result.last[:gender].should eq("female")
-        result.last[:birthday].should eq({ :day => 10, :month => 02, :year => 1974 })
+        result.last[:birthday].should eq({ day: 10, month: 02, year: 1974 })
         result.last[:profile_picture].should be_nil
         result.last[:relation].should eq('spouse')
         result.first[:address_1].should eq(nil)

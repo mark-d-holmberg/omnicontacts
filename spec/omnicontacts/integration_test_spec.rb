@@ -7,7 +7,7 @@ describe IntegrationTest do
     it "should redirect to the provider's redirect_path" do
       provider = mock
       redirect_path = "/redirect_path"
-      provider.stub(:redirect_path => redirect_path)
+      provider.stub(redirect_path: redirect_path)
       IntegrationTest.instance.mock_authorization_from_user(provider)[1]["location"].should eq(redirect_path)
     end
   end
@@ -15,9 +15,9 @@ describe IntegrationTest do
   context "mock_callback" do
 
     before(:each) {
-      @env = {}
+      @env      = {}
       @provider = self.mock
-      @provider.stub(:class_name => "test")
+      @provider.stub(class_name: "test")
       IntegrationTest.instance.clear_mocks
     }
 
@@ -26,7 +26,7 @@ describe IntegrationTest do
     end
 
     it "should return a configured list of contacts " do
-      contacts = [:name => 'John Doe', :email => 'john@doe.com']
+      contacts = [name: 'John Doe', email: 'john@doe.com']
       IntegrationTest.instance.mock('test', contacts)
       result = IntegrationTest.instance.mock_fetch_contacts(@provider)
       result.size.should be(1)
@@ -35,7 +35,7 @@ describe IntegrationTest do
     end
 
     it "should return a single element list of contacts " do
-      contact = {:name => 'John Doe', :email => 'john@doe.com'}
+      contact = {name: 'John Doe', email: 'john@doe.com'}
       IntegrationTest.instance.mock('test', contact)
       result = IntegrationTest.instance.mock_fetch_contacts(@provider)
       result.size.should be(1)
@@ -44,8 +44,8 @@ describe IntegrationTest do
     end
 
     it "should return a user" do
-      contact = {:name => 'John Doe', :email => 'john@doe.com'}
-      user = {:name => 'Mary Smith', :email => 'mary@smith.com'}
+      contact = {name: 'John Doe', email: 'john@doe.com'}
+      user    = {name: 'Mary Smith', email: 'mary@smith.com'}
       IntegrationTest.instance.mock('test', contact, user)
       result = IntegrationTest.instance.mock_fetch_user(@provider)
       result[:email].should eq(user[:email])

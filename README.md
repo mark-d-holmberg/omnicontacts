@@ -31,9 +31,9 @@ As for OmniAuth, there is a Builder facilitating the usage of multiple contacts 
 require "omnicontacts"
 
 Rails.application.middleware.use OmniContacts::Builder do
-  importer :gmail, "client_id", "client_secret", {:redirect_path => "/oauth2callback", :ssl_ca_file => "/etc/ssl/certs/curl-ca-bundle.crt"}
-  importer :yahoo, "consumer_id", "consumer_secret", {:callback_path => "/callback"}
-  importer :linkedin, "consumer_id", "consumer_secret", {:redirect_path => "/oauth2callback", :state => '<long_unique_string_value>'}
+  importer :gmail, "client_id", "client_secret", {redirect_path: "/oauth2callback", ssl_ca_file: "/etc/ssl/certs/curl-ca-bundle.crt"}
+  importer :yahoo, "consumer_id", "consumer_secret", {callback_path: "/callback"}
+  importer :linkedin, "consumer_id", "consumer_secret", {redirect_path: "/oauth2callback", state: '<long_unique_string_value>'}
   importer :hotmail, "client_id", "client_secret"
   importer :outlook, "app_id", "app_secret"
   importer :facebook, "client_id", "client_secret"
@@ -62,7 +62,7 @@ On the other hand it makes things much easier to leave the default value for `:r
 
 
 ##### Note:
-Please go through [MSDN](http://msdn.microsoft.com/en-us/library/cc287659.aspx) if above Hotmail link will not work.  
+Please go through [MSDN](http://msdn.microsoft.com/en-us/library/cc287659.aspx) if above Hotmail link will not work.
 Outlook is a newer Microsoft API which allows to retrieve real email address instead of `email_hashes` when using Hotmail, it also works with all kinds of MS accounts (Office 365, Hotmail.com, Live.com, MSN.com, Outlook.com, and Passport.com).
 
 ## Integrating with your Application
@@ -242,7 +242,7 @@ Gmail requires you to register the redirect_path on their website along with you
 To configure the max number of contacts to download from Gmail, just add a max results parameter in your initializer:
 
 ```ruby
-importer :gmail, "xxx", "yyy", :max_results => 1000
+importer :gmail, "xxx", "yyy", max_results: 1000
 ```
 
 Yahoo requires you to configure the Permissions your application requires. Make sure to go the Yahoo website and to select Read permission for Contacts.
@@ -264,21 +264,21 @@ In this way all requests to `/omnicontacts/provider` will be redirected automati
 The `mock` method allows to configure per-provider the result to return:
 
 ```ruby
-  OmniContacts.integration_test.mock(:provider_name, :email => "user@example.com")
+  OmniContacts.integration_test.mock(:provider_name, email: "user@example.com")
 ```
 
 You can either pass a single hash or an array of hashes. If you pass a string, an error will be triggered with subsequent redirect to `/contacts/failure?error_message=internal_error`
 
 You can also pass a user to fill `omnicontacts.user` (optional)
 ```ruby
-  OmniContacts.integration_test.mock(:provider_name, {:email => "contact@example.com"}, {:email => "user@example.com"})
+  OmniContacts.integration_test.mock(:provider_name, {email: "contact@example.com"}, {email: "user@example.com"})
 ```
 
 Follows a full example of an integration test:
 
 ```ruby
   OmniContacts.integration_test.enabled = true
-  OmniContacts.integration_test.mock(:gmail, :email => "user@example.com")
+  OmniContacts.integration_test.mock(:gmail, email: "user@example.com")
   visit '/contacts/gmail'
   page.should have_content("user@example.com")
 ```

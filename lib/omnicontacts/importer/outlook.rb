@@ -12,13 +12,13 @@ module OmniContacts
 
       def initialize app, client_id, client_secret, options ={}
         super app, client_id, client_secret, options
-        @auth_host = "login.microsoftonline.com"
-        @authorize_path = "/common/oauth2/v2.0/authorize"
-        @scope = options[:permissions] || "https://outlook.office.com/contacts.read"
+        @auth_host       = "login.microsoftonline.com"
+        @authorize_path  = "/common/oauth2/v2.0/authorize"
+        @scope           = options[:permissions] || "https://outlook.office.com/contacts.read"
         @auth_token_path = "/common/oauth2/v2.0/token"
-        @contacts_host = "outlook.office.com"
-        @contacts_path = "/api/v2.0/me/contacts"
-        @self_path = "/api/v2.0/me"
+        @contacts_host   = "outlook.office.com"
+        @contacts_path   = "/api/v2.0/me/contacts"
+        @self_path       = "/api/v2.0/me"
       end
 
       def fetch_contacts_using_access_token access_token, token_type
@@ -29,7 +29,7 @@ module OmniContacts
 
       def fetch_current_user access_token, token_type
         self_response = https_get(@contacts_host, @self_path, {}, contacts_req_headers(access_token, token_type))
-        user = current_user self_response
+        user          = current_user self_response
         set_current_user user
       end
 
@@ -44,8 +44,8 @@ module OmniContacts
         me = JSON.parse(me)
 
         name_splitted = me["DisplayName"].split(" ")
-        first_name = name_splitted.first
-        last_name = name_splitted.last if name_splitted.size > 1
+        first_name    = name_splitted.first
+        last_name     = name_splitted.last if name_splitted.size > 1
 
         user = empty_contact
         user[:id]         = me["Id"]
@@ -85,9 +85,9 @@ module OmniContacts
       end
 
       def empty_contact
-        { :id => nil, :first_name => nil, :last_name => nil, :name => nil, :email => nil,
-          :gender => nil, :birthday => nil, :profile_picture => nil, :address_1 => nil,
-          :address_2 => nil, :city => nil, :region => nil, :postcode => nil, :relation => nil }
+        { id: nil, first_name: nil, last_name: nil, name: nil, email: nil,
+          gender: nil, birthday: nil, profile_picture: nil, address_1: nil,
+          address_2: nil, city: nil, region: nil, postcode: nil, relation: nil }
       end
 
       def parse_email emails

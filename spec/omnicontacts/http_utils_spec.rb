@@ -5,7 +5,7 @@ describe OmniContacts::HTTPUtils do
 
   describe "to_query_string" do
     it "should create a query string from a map" do
-      result = OmniContacts::HTTPUtils.to_query_string(:name => "john", :surname => "doe")
+      result = OmniContacts::HTTPUtils.to_query_string(name: "john", surname: "doe")
       if result.match(/^name/)
         result.should eq("name=john&surname=doe")
       else
@@ -14,7 +14,7 @@ describe OmniContacts::HTTPUtils do
     end
 
     it "should work for integer values in the map" do
-      result = OmniContacts::HTTPUtils.to_query_string(:client_id => 1234, :secret => "1234HJL8")
+      result = OmniContacts::HTTPUtils.to_query_string(client_id: 1234, secret: "1234HJL8")
       result.should eq("client_id=1234&secret=1234HJL8")
     end
 
@@ -29,7 +29,7 @@ describe OmniContacts::HTTPUtils do
   describe "query_string_to_map" do
     it "should split a query string into a map" do
       query_string = "name=john&surname=doe"
-      result = OmniContacts::HTTPUtils.query_string_to_map(query_string)
+      result       = OmniContacts::HTTPUtils.query_string_to_map(query_string)
       result["name"].should eq("john")
       result["surname"].should eq("doe")
     end

@@ -26,7 +26,7 @@ describe OmniContacts::Middleware::OAuth2 do
       end
 
       def fetch_contacts_using_access_token token, token_type
-        [{:name => "John Doe", :email => "john@example.com"}]
+        [{name: "John Doe", email: "john@example.com"}]
       end
     end
   end

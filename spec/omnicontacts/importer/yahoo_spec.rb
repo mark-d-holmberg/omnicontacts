@@ -83,7 +83,7 @@ describe OmniContacts::Importer::Yahoo do
       result.first[:name].should eq("John Smith")
       result.first[:email].should eq("johnny@yahoo.com")
       result.first[:gender].should be_nil
-      result.first[:birthday].should eq({:day=>22, :month=>2, :year=>1952})
+      result.first[:birthday].should eq({day: 22, month: 2, year: 1952})
       result.first[:address_1].should eq('1313 Trashview Court')
       result.first[:address_2].should eq('Apt. 13')
       result.first[:city].should eq('Nowheresville')
@@ -115,7 +115,7 @@ describe OmniContacts::Importer::Yahoo do
       user[:last_name].should eq('Johnson')
       user[:name].should eq('Chris Johnson')
       user[:gender].should eq('male')
-      user[:birthday].should eq({:day=>21, :month=>06, :year=>nil})
+      user[:birthday].should eq({day: 21, month: 06, year: nil})
       user[:email].should eq('chrisjohnson@gmail.com')
       user[:profile_picture].should eq('https://avatars.zenfs.com/users/23T3E2R5TFMHDW-AFE-I7lUpIsGQ==.large.png')
     end

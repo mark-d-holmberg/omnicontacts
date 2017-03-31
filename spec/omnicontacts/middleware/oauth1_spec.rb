@@ -18,7 +18,7 @@ describe OmniContacts::Middleware::OAuth1 do
       end
 
       def fetch_contacts_from_token_and_verifier oauth_token, ouath_token_secret, oauth_verifier
-        [{:name => "John Doe", :email => "john@example.com"}]
+        [{name: "John Doe", email: "john@example.com"}]
       end
 
       def self.mock_session
